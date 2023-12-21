@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Pathfinder</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body id="body">
+        <canvas id="canvas"></canvas>
+        <div id="controls">
+            <button id="clearLocalStorage" onclick="localStorage.clear()">Clear Local Storage</button>
+            <button id="clearGraph" onclick="myGraph.clear()">Clear Graph</button>
+            <button id="pathfinderStart" onclick="findPath()">Find Path</button>
+            
+        </div>
+
+
+
+
+        <script src="graph.js"></script>
+        <script src="square.js"></script>
+        <script src="pathfinder.js"></script>
+        <script src="pathfinderManager.js"></script>
+
+        
+            
+        <script>
+            var canvas = document.getElementById("canvas");
+            const ctx = canvas.getContext("2d");
+            //window prompt asking for size
+            
+            
+            canvas.width = 1500;
+            canvas.height = 1500;
+            let size
+            //let myGraph = new Graph(canvas, 4, 4)
+            const squaresString = localStorage.getItem('graph');
+            if(!squaresString){size  = prompt("size:")}
+            else{size = 100}
+            const graphInfo = squaresString ? JSON.parse(squaresString) : null;
+            console.log(graphInfo);
+            let myGraph = graphInfo ? Graph.Load(canvas, size, size, graphInfo) : new Graph(canvas, size, size, []);
+            let myPathFinder = new PathFinderManager(myGraph.squares, myGraph);
+            
+
+            animate();
+
+
+            function animate(time) {
+                
+                requestAnimationFrame(animate);
+                
+                myGraph.draw(myPathFinder);
+                
+            }
+
+            function findPath(){
+
+                
+                myPathFinder.start();
+            }
+
+
+
+
+        </script>
+
+
+
+
+
+        
+    </body>
+</html>
